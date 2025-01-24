@@ -249,6 +249,7 @@ export default function LicenseRegister() {
                   <option value="5ª">5ª</option>
                   <option value="6ª">6ª</option>
                   <option value="7ª">7ª</option>
+                  <option value ="Renovação">Renovação</option>
                   <option value="Ampliação">Ampliação</option>
                   <option value="Corretiva">Corretiva</option>
                 </select>
