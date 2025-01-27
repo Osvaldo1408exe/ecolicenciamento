@@ -2,12 +2,22 @@ import { useEffect, useRef, useState } from "react";
 import api from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import { isDate } from "../../utils/functions";
+import DuplicateLicence from "../Button/DuplicatedLicence";
+
 export default function LicenseRegister() {
   const [unit, setUnit] = useState([]);
   const [type, setType] = useState([]);
   const [subunit, setSubunit] = useState([]);
   const [emitter, setEmitter] = useState([]);
   const [sector, setSector] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [formState, setFormState] = useState({});
+  const [licenceExists, setLicenceExists] = useState(false);
+
+  const handleDuplicate = () => {
+    postData(formState); // Enviar os dados salvos
+    setOpenModal(false); // Fechar modal após duplicar
+  };
   /*
     O trecho de código `const { user }: any = useAuth()` está desestruturarando o objeto `user` a partir do resultado do hook `useAuth()`.
     O código está usando a sintaxe TypeScript para especificar o tipo da variável `user` como `any`, o que significa que ela pode conter qualquer tipo de valor.
@@ -71,7 +81,7 @@ export default function LicenseRegister() {
    * Ao chamar `event.preventDefault()`, você impede o comportamento padrão de envio de formulários,
    * permitindo que você manipule os dados do formulário de forma personalizada.
    */
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const requerimentDate = isDate(requirementDateRef.current.value);
     const emitterDate = isDate(emitterDateRef.current.value);
@@ -109,15 +119,45 @@ export default function LicenseRegister() {
       setor: setorRef.current.value,
       username: user.username,
     };
-    postData(jsonData);
+
+
+  
+
+  // Verifica se a licença já existe antes de enviar
+  const exists = await checkLicenceExists(jsonData);
+  console.log("Licença existe?", exists); // Adicione isso para depuração
+
+    if (exists) {
+      setLicenceExists(true);
+      setFormState(jsonData);
+      setOpenModal(true); // Exibir modal de duplicação
+    } else {
+      postData(jsonData);
+    }
   };
-  /*
-    O código abaixo é um hook `useEffect` do React que faz uma chamada assíncrona à API para obter dados de
-    do endpoint "/campos/campos.php". Uma vez que os dados são obtidos com sucesso, ele está definindo os valores de estado
-    para unidade, tipo, subunidade, orgão emissor e setor usando os dados de resposta. Este hook `useEffect` é executado apenas uma vez quando
-    o componente é montado (matriz de dependências vazia []).
-    Serve para alimentar os campos de seleção com muitas unidades
-  */
+
+  const checkLicenceExists = async (data) => {
+    try {
+      const response = await api.post("licencas/checkExistence.php", data);
+      console.log("Resposta do backend:", response.data); // Verifique o que o backend está retornando
+      if (response.data && response.data.exists !== undefined) {
+        return response.data.exists; // Retorne o valor de 'exists'
+      } else {
+        console.error("Formato inesperado da resposta:", response.data);
+        return false;
+      }
+    } catch (error) {
+      console.error("Erro ao verificar existência:", error);
+      return false;
+    }
+  };
+
+
+
+  useEffect(() => {
+    console.log("Modal aberto?", openModal);  // Para depuração
+  }, [openModal]);  // Executado sempre que openModal mudar
+  
   useEffect(() => {
     async function getData() {
       await api
@@ -135,6 +175,7 @@ export default function LicenseRegister() {
     }
     getData();
   }, []);
+  
   return (<>
     <div className="max-h-[7%] text-center p-5 text-3xl font-bold">
       Nova Licença
@@ -381,12 +422,21 @@ export default function LicenseRegister() {
                 <textarea className="focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" ref={observationsRef} id="observations" required />
               </div>
             </div>
-            <div className="py-6 text-right">
-              <button type="submit" className="w-56 px-4 py-2 text-base font-medium text-white bg-blue-500 border border-transparent rounded-md shadow-sm close-modal hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm">
-                Salvar
-              </button>
-            </div>
+              <div className="py-6 text-right">
+                <button type="submit" className="w-56 px-4 py-2 text-base font-medium text-white bg-blue-500 border border-transparent rounded-md shadow-sm close-modal hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm">
+                  Salvar
+                </button>
+              </div>
           </div>
+          {/* Modal de Duplicação */}
+          {openModal && (
+            <DuplicateLicence
+              duplicar={handleDuplicate}
+              cancelar={() => setOpenModal(false)}
+            />
+          )}
+
+
         </form>
       </div>
     </div>
