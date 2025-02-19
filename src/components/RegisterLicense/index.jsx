@@ -282,7 +282,7 @@ export default function LicenseRegister() {
                   Especificação:
                 </label>
                 <select className="focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" ref={specificationRef} id="specification">
-                  <option value=""></option>
+                  <option value="-">-</option>
                   <option value="1ª">1ª</option>
                   <option value="2ª">2ª</option>
                   <option value="3ª">3ª</option>
