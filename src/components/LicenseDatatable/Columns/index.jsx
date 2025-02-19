@@ -201,7 +201,7 @@ export default function genColumns() {
         }),
         columnHelper.accessor((row) => row.button, {
             id: "button",
-            header: () => <span>#</span>,
+            header: () => <span>Opções</span>,
             cell: (props) => <ButtonEdit row={props.row} />,
         }),
         columnHelper.accessor((row) => row.button, {
