@@ -63,14 +63,14 @@ export default function Navbar() {
                 <DashGestor />
               </div>
             </NavLink>
-            <NavLink className={({ isActive }) => isActive
+            {/* <NavLink className={({ isActive }) => isActive
               ? "inline-flex gap-x-1 items-center bg-red-100 text-black rounded-md lg:px-2 lg:py-1 2xl:px-3 xl:py-2 text-center text-sm text-red-800 font-medium"
               : "inline-flex gap-x-1 items-center hover:bg-gray-200 text-black rounded-md lg:px-2 lg:py-1 2xl:px-3 xl:py-2 text-sm text-center font-medium"} to="/dashboard_monitor">
               Dashboard (Monitor)
               <div className="hidden xl:block">
                 <DashMonitor />
               </div>
-            </NavLink>
+            </NavLink> */}
             <NavLink className={({ isActive }) => isActive
               ? "inline-flex gap-x-1 items-center bg-green-100 text-black rounded-md lg:px-2 lg:py-1 2xl:px-3 xl:py-2 text-center text-sm text-green-700 font-medium"
               : "inline-flex gap-x-1 items-center hover:bg-gray-200 text-black rounded-md lg:px-2 lg:py-1 2xl:px-3 xl:py-2 text-sm text-center font-medium"} to="/dashboard_operacao">
