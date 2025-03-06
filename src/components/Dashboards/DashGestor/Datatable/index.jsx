@@ -41,6 +41,7 @@ export default function DashboardGestor() {
         responseData.forEach((element) => {
             if (element.situacao_licenca == "Aguardando análise" ||
                 element.situacao_licenca == "Em renovação" ||
+                element.situacao_licenca == "Em prorrogação" ||
                 element.situacao_licenca == "Vigente - Providenciar Documentos" ||
                 element.situacao_licenca == "Vencida" ||
                 element.situacao_licenca == "Prazo extrapolado" ||
