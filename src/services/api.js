@@ -6,6 +6,6 @@ definir o `baseURL` como "http://ecolicencascaj/api_ecoLic". Isso significa que 
 usando esta instância `api` terá esta URL base anexada às suas URLs relativas.
 */
 const api = axios.create({
-  baseURL: "http://ecolicencascaj/api_ambiente_teste",
+  baseURL: "http://ecolicencascaj/api_ecoLic/",
 });
 export default api;
