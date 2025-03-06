@@ -63,6 +63,9 @@ export function paintCell(info) {
     case "Vigente": {
       // GREEN
       return "text-white bg-green-400";
+    }case "Em prorrogação": {
+      // GREEN
+      return "text-gray-700 bg-green-200";
     }
     case "Vigente - Providenciar Documentos": {
       // YELLOW
