@@ -48,6 +48,11 @@ export function genColumns() {
             cell: (info) => <p className="font-bold">{info.getValue()}</p>,
             header: () => <span>Unidade</span>,
         }),
+        columnHelper.accessor((row) => row.sub_unidade, {
+            id: "sub_unidade",
+            cell: (info) => <p className="font-bold">{info.getValue()}</p>,
+            header: () => <span>Subunidade</span>,
+        }),
         columnHelper.accessor((row) => row.situacao_licenca, {
             id: "situacao_licenca",
             cell: (info) => <p className="font-bold">{info.getValue()}</p>,
