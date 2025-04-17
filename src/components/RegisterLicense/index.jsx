@@ -16,7 +16,7 @@ export default function LicenseRegister() {
 
   const handleDuplicate = () => {
     postData(formState); // Enviar os dados salvos
-    setOpenModal(false); // Fechar modal após duplicar
+    resetForm(); // limpa o formulário
   };
   /*
     O trecho de código `const { user }: any = useAuth()` está desestruturarando o objeto `user` a partir do resultado do hook `useAuth()`.
@@ -82,6 +82,7 @@ export default function LicenseRegister() {
    * permitindo que você manipule os dados do formulário de forma personalizada.
    */
   const handleSubmit = async (event) => {
+    
     event.preventDefault();
     const requerimentDate = isDate(requirementDateRef.current.value);
     const emitterDate = isDate(emitterDateRef.current.value);
@@ -123,41 +124,33 @@ export default function LicenseRegister() {
 
   
 
-  // Verifica se a licença já existe antes de enviar
-  const exists = await checkLicenceExists(jsonData);
-  console.log("Licença existe?", exists); // Adicione isso para depuração
-
-    if (exists) {
-      setLicenceExists(true);
-      setFormState(jsonData);
-      setOpenModal(true); // Exibir modal de duplicação
-    } else {
-      postData(jsonData);
-    }
-  };
-
-  const checkLicenceExists = async (data) => {
-    try {
-      const response = await api.post("licencas/checkExistence.php", data);
-      console.log("Resposta do backend:", response.data); // Verifique o que o backend está retornando
-      if (response.data && response.data.exists !== undefined) {
-        return response.data.exists; // Retorne o valor de 'exists'
-      } else {
-        console.error("Formato inesperado da resposta:", response.data);
-        return false;
-      }
-    } catch (error) {
-      console.error("Erro ao verificar existência:", error);
-      return false;
-    }
+    
+    postData(jsonData);
+    resetForm(); // limpa o formulário 
   };
 
 
-
-  useEffect(() => {
-    console.log("Modal aberto?", openModal);  // Para depuração
-  }, [openModal]);  // Executado sempre que openModal mudar
+  const resetForm = () => {
+    const refs = [
+      areaRef, unitRef, subunitRef, requirementDateRef, controlRef, emitterRef,
+      typeRef, specificationRef, licenseNumberRef, fceiRef, sinfatRef, sgpeRef,
+      seiRef, emitterDateRef, dueDateRef, previsionRef, requirementRef,
+      protocolDateRef, newLicenseIssuedRef, processSituationRef,
+      updatedSaRef, observationsRef, setorRef
+    ];
   
+    refs.forEach(ref => {
+      if (ref.current) {
+        if (ref.current.tagName === "SELECT" || ref.current.tagName === "INPUT" || ref.current.tagName === "TEXTAREA") {
+          ref.current.value = "";
+        }
+      }
+    });
+  };
+  
+
+
+
   useEffect(() => {
     async function getData() {
       await api
@@ -428,15 +421,6 @@ export default function LicenseRegister() {
                 </button>
               </div>
           </div>
-          {/* Modal de Duplicação */}
-          {openModal && (
-            <DuplicateLicence
-              duplicar={handleDuplicate}
-              cancelar={() => setOpenModal(false)}
-            />
-          )}
-
-
         </form>
       </div>
     </div>
